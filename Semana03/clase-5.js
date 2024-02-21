@@ -33,7 +33,7 @@ const albumesFamosos = [{
     id: "c321",
     nombre: "Back in Black",
     imagen: "https://i1.wp.com/www.scienceofnoise.net/wp-content/uploads/2020/07/068660474366a63e1263e53ff370eb50.jpg",
-    like: false
+    like: true
 }
 ];
 
@@ -44,7 +44,21 @@ const albumesFamosos = [{
 /* -------------------------------------------------------------------------- */
 //do while, prompt, innerText
 function obtenerUsuario() {
+    const nombreUsuario = document.getElementById("nombreUsuario")
 
+    let usuario = ""
+    do {
+       usuario = prompt("Ingrese su nombre de usuario: ") 
+    } while (usuario == null && usuario == "" && usuario.length < 3);
+
+
+    let nombres = usuario.split(" ")
+    console.log(nombres);
+
+   
+    usuario = nombres.map( nombre => nombre.charAt(0).toUpperCase() +  nombre.slice(1).toLowerCase()).join(" ")    
+    nombreUsuario.innerText = usuario
+   
 }
 
 obtenerUsuario();
@@ -54,7 +68,23 @@ obtenerUsuario();
 /* -------------------------------------------------------------------------- */
 //forEach, template strings, innerHTML
 function renderizarAlbumes(listado) {
-    
+    const covers = document.querySelector(".covers")
+    console.log(covers);
+    covers.innerHTML = ""
+
+    listado.forEach(album => {
+        
+        // Metodo de insercion  de templete literals
+        covers.innerHTML += `
+            <li data-id="${album.id}">
+                <img
+                src="${album.imagen}"
+                alt="miniatura del album ${album.nombre}">
+                <p>${album.nombre}</p>
+                <i id="${album.id}" class="fa fa-heart${album.like ? " favorito" : ""} "></i>
+            </li>
+        `    
+    });    
 }
 
 renderizarAlbumes(albumesFamosos);
@@ -71,8 +101,20 @@ renderizarAlbumes(albumesFamosos);
 // 2- contar la cantidad de favoritos y pintarlo en el span correspondiente
 // 3- tener en cuenta: usar las palabra en plural o en singular, según cuando
 // sea necesario ( es decir: 1 album, 1 favorito / 2 albumes, 3 favoritos )
-function mostrarDatosEnPerfil(albumes) {
-// desarrollar la función 👇
 
+
+function mostrarDatosEnPerfil(albumes) {
+    
+    let favoritos = albumes.filter(e=> e.like);
+
+    const spanAlbums = document.querySelector("#cant-albums");
+    spanAlbums.textContent= `${albumes.length} ${albumes.length==1? 'album': 'albumes'}`;
+    
+    
+
+    const spanFavoritos = document.querySelector("#cant-favoritos");
+    spanFavoritos.textContent= `${favoritos.length} ${favoritos.length==1? 'favorito': 'favoritos'}`;
 }
+
+
 mostrarDatosEnPerfil(albumesFamosos);
